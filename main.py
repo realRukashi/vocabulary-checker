@@ -1,5 +1,11 @@
 import streamlit as st
 
+st.set_page_config(
+    page_title="Vocabulary Checker",  # Change this to your desired tab title
+    page_icon="🚀",  # Optional: Set a favicon
+    layout="wide"  # Optional: Set layout to 'wide' or 'centered'
+)
+
 def leven_dist(token1, token2):
     dp = [[0] * (len(token2) + 1) for i in range(len(token1) + 1)]
     for i in range(len(token1) + 1):
@@ -37,13 +43,13 @@ def main():
         for vocab in vocabs:
             dist[vocab] = leven_dist(word, vocab)
         
-        sorted_dist = dict(sorted(dist.items(), key = lambda x:x[1])[:20])
+        sorted_dist = dict(sorted(dist.items(), key = lambda x:x[1])[:min(len(dist), 20)])
         cur = 0
         keys_list = list(sorted_dist.keys())
         
         st.markdown("### **Best fitted:**")
         
-        while dist[keys_list[cur]] == dist[keys_list[0]]:
+        while cur < len(keys_list) and dist[keys_list[cur]] == dist[keys_list[0]]:
             st.write("-\t", keys_list[cur])
             cur += 1
             
